@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:project5/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -15,11 +17,13 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _acctypeController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+    return Scaffold(
+      
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children:  [
@@ -53,6 +57,29 @@ class _SignupState extends State<Signup> {
               prefixIcon: Icon(Icons.lock, color: Colors.black,),
             ),
           ),
+          const SizedBox(height: 26.0,),
+          TextField(
+            controller: _acctypeController,
+            decoration: const InputDecoration(
+              hintText: "Account Type",
+              prefixIcon: Icon(Icons.lock, color: Colors.black,),
+            ),
+          ),
+          
+          
+          /*DropdownButton(
+            items: const [
+              DropdownMenuItem(child: Text("Student"), value: "1"),
+              DropdownMenuItem(child: Text("OrgCom"), value: "2"),
+            ] ,
+            value: _acctype,
+            onChanged: (String? newval) {
+              if (newval is String){
+                setState(() {_acctype = newval;});
+              }
+            }
+          ),*/
+          const SizedBox(height: 88.0,),
           Container(
             width: double.infinity,
             child: RawMaterialButton(
@@ -65,10 +92,14 @@ class _SignupState extends State<Signup> {
                 try{
                   final newUser = auth.createUserWithEmailAndPassword(email: _emailController.text, password: _passwordController.text);
                   if (newUser != null) {
+                    FirebaseFirestore.instance.collection('Users').doc(_emailController.text).set({
+                      "type": _acctypeController.text,
+                    });
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
+
                   }
                 } catch (e) {
-                  print(e);
+                  //print(e);
                 }
               }, 
               child: const Text("Register", style: TextStyle(

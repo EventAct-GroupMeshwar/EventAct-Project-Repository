@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +61,7 @@ class _HomepageState extends State<HomePage> {
 }
 
 class LoginScreen extends StatefulWidget{
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key,}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -72,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen>{
     try{
       UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
       user = userCredential.user;
+
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found"){
         print("no user found for that email");
@@ -129,6 +133,7 @@ class _LoginScreenState extends State<LoginScreen>{
           const Text("Don't Remember your Password", style: TextStyle(
             color: Colors.blue,
           ),),
+          
           const SizedBox(height: 88.0,),
           
           Container(
@@ -140,9 +145,18 @@ class _LoginScreenState extends State<LoginScreen>{
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () async {
                 User? user = await loginUsingEmailPassword(email: _emailController.text, password: _passwordController.text, context: context);            
-                print(user);
+                //print(user);
                 if (user != null){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeScreen()));
+                  FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
+                  .then((value) {
+                    var utype = value['type'];
+                    
+                    if (utype == '1'){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen()));
+                    }else if (utype == '2'){
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen()));
+                    }
+                  });                 
                 }  
               },
               child: const Text("Login", style: TextStyle(
@@ -151,7 +165,25 @@ class _LoginScreenState extends State<LoginScreen>{
               ),),
             ),
           ),
-          
+          const SizedBox(height: 12.0,),
+          Container(
+            width: double.infinity,
+            child: RawMaterialButton(
+              fillColor: const Color(0xFF0069FE),
+              elevation: 0.0,
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+              onPressed: () async {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>Signup()));
+              },
+              child: const Text("Register", style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),),
+            ),
+          ),
+
+
         ],
       ),
     );
