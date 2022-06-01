@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:project5/Services/firecloud.dart';
 import 'package:project5/home_screen.dart';
 import 'Models/event.dart';
 import 'Models/account.dart';
@@ -64,7 +65,7 @@ class _EditEventState extends State<EditEvent> {
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(
               hintText: "Date of Event",
-              prefixIcon: Icon(Icons.mail, color: Colors.black,),
+              prefixIcon: Icon(Icons.calendar_month, color: Colors.black,),
             ),
           ),
           const SizedBox(height: 26.0,),
@@ -72,7 +73,7 @@ class _EditEventState extends State<EditEvent> {
             controller: _descController,
             decoration: const InputDecoration(
               hintText: "Description",
-              prefixIcon: Icon(Icons.lock, color: Colors.black,),
+              prefixIcon: Icon(Icons.badge, color: Colors.black,),
             ),
           ),
 
@@ -87,14 +88,9 @@ class _EditEventState extends State<EditEvent> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () async {
                 
-                FirebaseFirestore.instance.collection('Events').doc(event.name).update({
-                  "Date" : _dateController.text,
-                  "Description": _descController.text,
-                  "Name": event.name, 
-                }).then((value) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,))));
-                
-            
-                  
+                FireCloud.EditEvent(_dateController.text, _descController.text, event.name);
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
+                                
               },
               child: const Text("Save", style: TextStyle(
                 color: Colors.white,

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'Services/FireAuth.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,25 +71,6 @@ class LoginScreen extends StatefulWidget{
 
 class _LoginScreenState extends State<LoginScreen>{
 
-  static Future<User?> loginUsingEmailPassword({required String email, required String password, required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
-    try{
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(email: email, password: password);
-      user = userCredential.user;
-
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found"){
-        print("no user found for that email");
-      }
-    }
-
-    return user;
-  }
-
-
-  
-
   @override
   Widget build(BuildContext context){
     TextEditingController _emailController = TextEditingController();
@@ -145,20 +127,22 @@ class _LoginScreenState extends State<LoginScreen>{
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () async {
-                User? user = await loginUsingEmailPassword(email: _emailController.text, password: _passwordController.text, context: context);            
+                User? user = await FireAuth.loginUsingEmailPassword(email: _emailController.text, password: _passwordController.text, context: context);            
                 //print(user);
                 if (user != null){
                   FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
                   .then((value) {
-                    var utype = value['type'];
-
-                    final Account acc = Account(value['first name'], value['last name'], value['age'], value['type']);
+                    // acc =  FireAuth.getUserType(_emailController.text);
+                    FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
+                    .then((value){
+                      Account acc = Account(value['first name'], value['last name'], value['age'], value['type']);
+                      if (acc.acctype == '1'){
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: acc,)));
+                      }else if (acc.acctype == '2'){
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen()));
+                      }
+                    });
                     
-                    if (utype == '1'){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: acc,)));
-                    }else if (utype == '2'){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen()));
-                    }
                   });                 
                 }  
               },
