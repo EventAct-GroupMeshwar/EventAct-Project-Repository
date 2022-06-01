@@ -1,5 +1,6 @@
 //import 'dart:html';
 import 'Models/event.dart';
+import 'Models/account.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -11,13 +12,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class OrgHomeScreen extends StatefulWidget {
-  const OrgHomeScreen({Key? key}) : super(key: key);
+  const OrgHomeScreen({Key? key, required this.user}) : super(key: key);
+
+  final Account user;
+
 
   @override
-  State<OrgHomeScreen> createState() => _OrgHomeScreenState();
+  State<OrgHomeScreen> createState() => _OrgHomeScreenState(this.user);
 }
 
 class _OrgHomeScreenState extends State<OrgHomeScreen> {
+  final Account user;
+
+  _OrgHomeScreenState(this.user);
   final _auth = FirebaseAuth.instance;
   CollectionReference events = FirebaseFirestore.instance.collection('Events');
 
@@ -28,12 +35,15 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
+            onPressed: (){
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
+            }, 
+            icon: Icon(Icons.account_circle)),
+          IconButton(
               icon: Icon(Icons.logout),
               onPressed: () {
                 _auth.signOut();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
-
-                //Implement logout functionality
               }),
         ],
         title: Text('OrgCom View Events'),
@@ -68,7 +78,7 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
                         RawMaterialButton(
                           fillColor: const Color(0xFF0069FE),
                           onPressed: () {
-                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>EditEvent(event: Event(data["Name"], data["Date"], data["Description"]))));
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>EditEvent(user: user ,event: Event(data["Name"], data["Date"], data["Description"]))));
                           },
                           child: const Text("Edit Event Details",
                               style: TextStyle(

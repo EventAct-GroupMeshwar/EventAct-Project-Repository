@@ -3,24 +3,26 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:project5/home_screen.dart';
 import 'Models/event.dart';
+import 'Models/account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class EditEvent extends StatefulWidget {
-  const EditEvent({Key? key, required this.event}) : super(key: key);
+  const EditEvent({Key? key, required this.event, required this.user}) : super(key: key);
 
+  final Account user;
   final Event event;
 
   @override
   State<EditEvent> createState() {
-    return _EditEventState(this.event);
+    return _EditEventState(this.event, this.user);
   }
 }
 
 class _EditEventState extends State<EditEvent> {
   final Event event;
-
-  _EditEventState(this.event);
+  final Account user;
+  _EditEventState(this.event, this.user);
 
   
 
@@ -39,7 +41,7 @@ class _EditEventState extends State<EditEvent> {
           IconButton(
               icon: Icon(Icons.keyboard_return),
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user)));
               }),
         ],
         title: Text('Edit Events'),
@@ -89,7 +91,7 @@ class _EditEventState extends State<EditEvent> {
                   "Date" : _dateController.text,
                   "Description": _descController.text,
                   "Name": event.name, 
-                }).then((value) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen())));
+                }).then((value) => Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,))));
                 
             
                   

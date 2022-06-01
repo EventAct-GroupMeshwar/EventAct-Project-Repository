@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:project5/Models/account.dart';
 import 'package:project5/home_screen.dart';
 import 'package:project5/signup_screen.dart';
 
@@ -150,9 +151,11 @@ class _LoginScreenState extends State<LoginScreen>{
                   FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
                   .then((value) {
                     var utype = value['type'];
+
+                    final Account acc = Account(value['first name'], value['last name'], value['age'], value['type']);
                     
                     if (utype == '1'){
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: acc,)));
                     }else if (utype == '2'){
                       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen()));
                     }
