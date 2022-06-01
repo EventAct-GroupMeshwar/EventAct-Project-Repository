@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen>{
                     // acc =  FireAuth.getUserType(_emailController.text);
                     FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
                     .then((value){
-                      Account acc = Account(value['first name'], value['last name'], value['age'], value['type']);
+                      Account acc = Account(value['first name'], value['last name'], value['age'], value['type'], _emailController.text);
                       if (acc.acctype == '1'){
                         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: acc,)));
                       }else if (acc.acctype == '2'){

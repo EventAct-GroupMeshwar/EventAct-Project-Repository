@@ -31,10 +31,10 @@ class FireAuth {
 
   static Future<Account?> getUserType(String email) async {
 
-
+    
     await FirebaseFirestore.instance.collection("Users").doc(email).get()
     .then((value){
-      Account? acc = Account(value['first name'], value['last name'], value['age'], value['type']);
+      Account? acc = Account(value['first name'], value['last name'], value['age'], value['type'], email);
       return acc;
     });
   }
