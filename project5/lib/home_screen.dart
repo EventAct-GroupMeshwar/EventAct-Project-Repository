@@ -36,6 +36,9 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
         actions: <Widget>[
           IconButton(
             onPressed: (){
+              //-----------------------//
+              //      Profile icon     //
+              //-----------------------//
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
             }, 
             icon: Icon(Icons.account_circle)),
