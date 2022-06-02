@@ -7,24 +7,22 @@ import 'package:project5/home_screen.dart';
 import 'package:project5/signup_screen.dart';
 
 class FireCloud {
-  static Future<String?> EditEvent(String date, String desc, String name) async {
+  static Future EditEvent(String date, String desc, String name) async {
     FirebaseFirestore.instance.collection('Events').doc(name).update({
       "Date" : date,
       "Description": desc,
       "Name": name, 
     });
-    String? str = "1";
-    return str;
+   
   }
 
-  static Future<String?> DeleteEvent(String name) async {
+  static Future DeleteEvent(String name) async {
 
     FirebaseFirestore.instance.collection('Events').doc(name).delete();
-    String? str = "1";
-    return str;
+    
   }
 
-  static Future<String?> createEvent(String name, String date, String desc) async {
+  static Future createEvent(String name, String date, String desc) async {
     FirebaseFirestore.instance.collection("Events").doc(name).set({
       "Name": name,
       "Date": date,
