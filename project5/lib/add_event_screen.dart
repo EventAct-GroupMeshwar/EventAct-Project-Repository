@@ -1,37 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:project5/Services/firecloud.dart';
 import 'package:project5/home_screen.dart';
-import 'Models/event.dart';
 import 'Models/account.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'Services/firecloud.dart';
 
 
-class EditEvent extends StatefulWidget {
-  const EditEvent({Key? key, required this.event, required this.user}) : super(key: key);
-
+class AddEvent extends StatefulWidget {
+  const AddEvent({Key? key, required this.user}) : super(key: key);
   final Account user;
-  final Event event;
-
   @override
-  State<EditEvent> createState() {
-    return _EditEventState(this.event, this.user);
-  }
+  State<AddEvent> createState() => _AddEventState(this.user);
 }
 
-class _EditEventState extends State<EditEvent> {
-  final Event event;
+class _AddEventState extends State<AddEvent> {
   final Account user;
-  _EditEventState(this.event, this.user);
+  _AddEventState(this.user);
 
-  
-
-
-  late TextEditingController _dateController = TextEditingController(text: event.date);
-  late TextEditingController _descController = TextEditingController(text: event.desc);
-
-
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
+  TextEditingController _descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,14 +40,15 @@ class _EditEventState extends State<EditEvent> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Text(event.name, style: const TextStyle(
-            color: Colors.black,
-            fontSize: 44.0,
-            fontWeight: FontWeight.bold,
-          ),),
-          const SizedBox(
-            height: 44.0,
-          ),
+          TextField(
+            controller: _nameController,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(
+              hintText: "Event Name",
+              prefixIcon: Icon(Icons.badge, color: Colors.black,),
+            ),
+          ),  
+          const SizedBox(height: 26.0,),
           TextField(
             controller: _dateController,
             keyboardType: TextInputType.emailAddress,
@@ -78,7 +67,7 @@ class _EditEventState extends State<EditEvent> {
           ),
 
           const SizedBox(height: 88.0,),
-          
+     
           Container(
             width: double.infinity,
             child: RawMaterialButton(
@@ -88,31 +77,11 @@ class _EditEventState extends State<EditEvent> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () async {
                 
-                FireCloud.EditEvent(_dateController.text, _descController.text, event.name);
+                FireCloud.createEvent(_nameController.text, _dateController.text, _descController.text);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
                                 
               },
-              child: const Text("Save", style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-              ),),
-            ),
-          ),
-          const SizedBox(height: 12.0,),
-          Container(
-            width: double.infinity,
-            child: RawMaterialButton(
-              fillColor: const Color(0xFF0069FE),
-              elevation: 0.0,
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-              onPressed: () async {
-                
-                FireCloud.DeleteEvent(event.name);
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
-                                
-              },
-              child: const Text("Delete event", style: TextStyle(
+              child: const Text("Create", style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
               ),),

@@ -1,4 +1,7 @@
 //import 'dart:html';
+
+import 'package:project5/add_event_screen.dart';
+
 import 'Models/event.dart';
 import 'Models/account.dart';
 import 'package:flutter/material.dart';
@@ -96,10 +99,16 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
               
             );
           } ,
-        )
+        ),
         
-        )
-
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>AddEvent(user: user,)));
+          },
+          tooltip: 'Increment',
+          child: const Icon(Icons.add),
+        ), 
     );
   }
 }

@@ -16,5 +16,20 @@ class FireCloud {
     String? str = "1";
     return str;
   }
+
+  static Future<String?> DeleteEvent(String name) async {
+
+    FirebaseFirestore.instance.collection('Events').doc(name).delete();
+    String? str = "1";
+    return str;
+  }
+
+  static Future<String?> createEvent(String name, String date, String desc) async {
+    FirebaseFirestore.instance.collection("Events").doc(name).set({
+      "Name": name,
+      "Date": date,
+      "Description": desc
+    });
+  }
   
 }
