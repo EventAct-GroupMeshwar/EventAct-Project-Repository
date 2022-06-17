@@ -68,7 +68,7 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
               return Text("Loading");
             }
 
-            return ListView(
+            return ListView( 
               children: snapshot.data!.docs.map((DocumentSnapshot document) {
                 Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
                   return Card( child: ListTile(
@@ -117,41 +117,3 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
 
 
 
-class StuHomeScreen extends StatefulWidget {
-  const StuHomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<StuHomeScreen> createState() => _StuHomeScreenState();
-}
-
-class _StuHomeScreenState extends State<StuHomeScreen> {
-  final _auth = FirebaseAuth.instance;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                _auth.signOut();
-                Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
-
-                //Implement logout functionality
-              }),
-        ],
-        title: Text('Home Page'),
-        backgroundColor: Colors.lightBlueAccent,
-      ),
-      body: Center(
-        child: Text(
-          "Welcome Student",
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-        ),
-      ),
-
-    );
-  }
-}

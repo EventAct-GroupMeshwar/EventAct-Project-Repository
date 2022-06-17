@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:project5/Models/account.dart';
 import 'package:project5/home_screen.dart';
+import 'package:project5/home_screen_stu.dart';
 import 'package:project5/signup_screen.dart';
 
 
@@ -135,11 +136,11 @@ class _LoginScreenState extends State<LoginScreen>{
                     // acc =  FireAuth.getUserType(_emailController.text);
                     FirebaseFirestore.instance.collection("Users").doc(_emailController.text).get()
                     .then((value){
-                      Account acc = Account(value['first name'], value['last name'], value['age'], value['type'], _emailController.text);
+                      Account acc = Account(value['first name'], value['last name'], value['age'], value['type'], _emailController.text, List.from(value['saved']));
                       if (acc.acctype == '1'){
                         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: acc,)));
                       }else if (acc.acctype == '2'){
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen()));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>StuHomeScreen(user: acc)));
                       }
                     });
                     

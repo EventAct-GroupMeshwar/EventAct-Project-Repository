@@ -6,6 +6,7 @@ import 'package:project5/home_screen.dart';
 import 'Models/event.dart';
 import 'Models/account.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'ModelView/editevent.dart';
 
 
 class EditEvent extends StatefulWidget {
@@ -86,11 +87,9 @@ class _EditEventState extends State<EditEvent> {
               elevation: 0.0,
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-              onPressed: () async {
-                
-                FireCloud.EditEvent(_dateController.text, _descController.text, event.name);
+              onPressed: () {
+                EditEventMVVM.editEvent(event.name, _dateController.text, _descController.text, user);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
-                                
               },
               child: const Text("Save", style: TextStyle(
                 color: Colors.white,
@@ -106,12 +105,10 @@ class _EditEventState extends State<EditEvent> {
               elevation: 0.0,
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-              onPressed: () async {
-                
-                FireCloud.DeleteEvent(event.name);
+              onPressed: () {
+                EditEventMVVM.deleteEvent(event.name, user);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
-                                
-              },
+              } ,
               child: const Text("Delete event", style: TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,

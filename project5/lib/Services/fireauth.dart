@@ -34,7 +34,7 @@ class FireAuth {
     
     await FirebaseFirestore.instance.collection("Users").doc(email).get()
     .then((value){
-      Account? acc = Account(value['first name'], value['last name'], value['age'], value['type'], email);
+      Account? acc = Account(value['first name'], value['last name'], value['age'], value['type'], email, List.from(value["saved"]));
       return acc;
     });
   }
