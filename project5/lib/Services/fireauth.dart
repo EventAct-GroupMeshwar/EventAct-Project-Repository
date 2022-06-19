@@ -13,6 +13,11 @@ class FireAuth {
     return firebaseApp;
   }
 
+
+  static getInstance() async {
+    return FirebaseAuth.instance;
+  }
+
   static Future<User?> loginUsingEmailPassword({required String email, required String password, required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;

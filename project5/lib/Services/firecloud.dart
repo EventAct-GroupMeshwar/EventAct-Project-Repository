@@ -29,5 +29,52 @@ class FireCloud {
       "Description": desc
     });
   }
+
+  static Query<Map<String, dynamic>> getEvents() {
+    return FirebaseFirestore.instance.collection('Events').orderBy("Date");
+  }
   
+  static Query<Map<String, dynamic>> getSavedEventsByDate(List<String> user)  {
+    return FirebaseFirestore.instance.collection("Events").where("Name", whereIn: user).orderBy("Date") ; 
+  }
+
+  static Query<Map<String, dynamic>> getSavedEventsByClub(List<String> user)  {
+    return FirebaseFirestore.instance.collection("Events").where("Name", whereIn: user).orderBy("Name") ; 
+  }
+
+  static addtoSaved(List<String> saved, String email) async {
+    FirebaseFirestore.instance.collection("Users").doc(email).update({"saved": saved});
+  }
+
+  static Future<String?> EditOrgProfile(
+    String fn,
+    String ln,
+    String age,
+    String email,
+  ) async {
+    FirebaseFirestore.instance.collection('Users').doc(email).update({
+      "first name": fn,
+      "last name": ln,
+      "age": age,
+    });
+    String? str = "1";
+    return str;
+  }
+
+  static Future<String?> EditStudentProfile(
+    String fn,
+    String ln,
+    String age,
+    String email,
+  ) async {
+    FirebaseFirestore.instance.collection('Users').doc(email).update({
+      "first name": fn,
+      "last name": ln,
+      "age": age,
+    });
+    String? str = "1";
+    return str;
+  }
+
+
 }
