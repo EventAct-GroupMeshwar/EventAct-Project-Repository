@@ -25,7 +25,7 @@ class StuMVVM {
   }
 
   static remSaved(List<String> saved, String email) async {
-    FireCloud.addtoSaved(saved, email);
+    FireCloud.remfromSaved(saved, email);
   }
 
 }

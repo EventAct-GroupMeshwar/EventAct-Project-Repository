@@ -46,6 +46,10 @@ class FireCloud {
     FirebaseFirestore.instance.collection("Users").doc(email).update({"saved": saved});
   }
 
+  static remfromSaved(List<String> saved, String email) async {
+    FirebaseFirestore.instance.collection("Users").doc(email).update({"saved": saved});
+  }
+
   static Future<String?> EditOrgProfile(
     String fn,
     String ln,

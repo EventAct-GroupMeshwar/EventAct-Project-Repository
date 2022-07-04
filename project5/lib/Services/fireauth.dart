@@ -14,7 +14,7 @@ class FireAuth {
   }
 
 
-  static getInstance() async {
+  static FirebaseAuth getInstance()  {
     return FirebaseAuth.instance;
   }
 

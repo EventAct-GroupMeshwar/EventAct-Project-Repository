@@ -1,6 +1,8 @@
 //import 'dart:html';
 
+import 'package:project5/ModelView/editevent.dart';
 import 'package:project5/add_event_screen.dart';
+import 'package:project5/view_attendees.dart';
 
 import 'Models/event.dart';
 import 'Models/account.dart';
@@ -12,6 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:project5/edit_event_screen.dart';
 import 'package:project5/main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:social_share/social_share.dart';
+
 
 
 class OrgHomeScreen extends StatefulWidget {
@@ -87,6 +91,31 @@ class _OrgHomeScreenState extends State<OrgHomeScreen> {
                             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>EditEvent(user: user ,event: Event(data["Name"], data["Date"], data["Description"]))));
                           },
                           child: const Text("Edit Event Details",
+                              style: TextStyle(
+                              color: Colors.white,
+                            )
+                          ),
+                        ),
+                        const SizedBox(height: 8.0,),
+                        RawMaterialButton(
+                          fillColor: const Color(0xFF0069FE),
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>View_Attendees(user: user ,event: Event(data["Name"], data["Date"], data["Description"]))));
+                          },
+                          child: const Text("View Attendees",
+                              style: TextStyle(
+                              color: Colors.white,
+                            )
+                          ),
+                        ),
+                        const SizedBox(height: 8.0,),
+                        RawMaterialButton(
+                          fillColor: const Color(0xFF0069FE),
+                          onPressed: () {
+                            EditEventMVVM().shareTelegram(Event(data["Name"], data["Date"], data["Description"]));
+                            
+                          },
+                          child: const Text("Share to Telegram",
                               style: TextStyle(
                               color: Colors.white,
                             )

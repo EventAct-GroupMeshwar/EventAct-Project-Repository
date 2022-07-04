@@ -24,7 +24,7 @@ class StuHomeScreen extends StatefulWidget {
 }
 
 class _StuHomeScreenState extends State<StuHomeScreen> {
-  final _auth = FireAuth.getInstance();
+  final _auth = FirebaseAuth.instance;
   var events = StuMVVM.getEvents();
   
   final Account user;
@@ -49,9 +49,9 @@ class _StuHomeScreenState extends State<StuHomeScreen> {
               //-----------------------//
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>EditStudentProfile(user: user,)));
             }, 
-            icon: Icon(Icons.account_circle)),
+            icon: const Icon(Icons.account_circle)),
             IconButton(
-                icon: Icon(Icons.logout),
+                icon: const Icon(Icons.logout),
                 onPressed: () {
                   _auth.signOut();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));

@@ -94,6 +94,7 @@ class _SignupState extends State<Signup> {
                   if (newUser != null) {
                     FirebaseFirestore.instance.collection('Users').doc(_emailController.text).set({
                       "type": _acctypeController.text,
+                      "saved": ["Coding Bootcamp", "An Event"],
                     });
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomePage()));
 

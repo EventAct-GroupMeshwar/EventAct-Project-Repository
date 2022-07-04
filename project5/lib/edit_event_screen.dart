@@ -1,6 +1,9 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:project5/Services/firecloud.dart';
 import 'package:project5/home_screen.dart';
 import 'Models/event.dart';
@@ -24,8 +27,25 @@ class EditEvent extends StatefulWidget {
 class _EditEventState extends State<EditEvent> {
   final Event event;
   final Account user;
+  final ev = EditEventMVVM();
   _EditEventState(this.event, this.user);
 
+  String? mtoken = " ";
+
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        mtoken = token;
+      });
+    });
+  }
+  void initState() {
+    super.initState();
+    getToken();
+    ev.requestPermission();
+    ev.loadFCM();
+    ev.listenFCM();
+  }
   
 
 
@@ -88,7 +108,7 @@ class _EditEventState extends State<EditEvent> {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () {
-                EditEventMVVM.editEvent(event.name, _dateController.text, _descController.text, user);
+                ev.editEvent(event.name, _dateController.text, _descController.text, user, mtoken);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
               },
               child: const Text("Save", style: TextStyle(
@@ -106,7 +126,7 @@ class _EditEventState extends State<EditEvent> {
               padding: const EdgeInsets.symmetric(vertical: 20.0),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
               onPressed: () {
-                EditEventMVVM.deleteEvent(event.name, user);
+                ev.deleteEvent(event.name, user, mtoken);
                 Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>OrgHomeScreen(user: user,)));
               } ,
               child: const Text("Delete event", style: TextStyle(
